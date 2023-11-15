@@ -28,16 +28,9 @@ public class SubscribeServlet extends HttpServlet {
             return;
         }
 
-        String messageSubscribe = null;
+        String messageSubscribe = "Thank you. Your email <em>" + email + "</em> has been accepted. If it wasn't already registered you will have to <a href='locations.jsp'>search</a> for the Branch Office closest to you and ask them for an account.";
         try {
-
-            String registeredUser = DBUtil.addSubscription(email);
-            if (registeredUser == null) {
-                messageSubscribe = "Thank you. Your email <em>" + email + "</em> has been accepted. You are not registered yet. Please <a href='locations.jsp'>search</a> for the Branch Office closest to you and ask them for an account.";
-            } else {
-                messageSubscribe = "Hello <em>" + registeredUser + "</em>! Your email <em>" + email + "</em> has been accepted. Please <a href='login.jsp'>sign in</a> to use our advanced banking features.";
-            }
-
+            DBUtil.addSubscription(email);
         } catch (Exception e) {
             messageSubscribe = "Unexpected error.";
         }
