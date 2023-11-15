@@ -58,8 +58,8 @@ public class LoginServlet extends HttpServlet {
             password = password.trim();
 
             if (!DBUtil.isValidUser(username, password)) {
-                LOG.error("Login failed >>> User: " + username + " >>> Password: " + password);
-                throw new Exception("Login Failed: We're sorry, but this username or password was not found in our system. Please try again.");
+                LOG.error("Login failed >>> User: " + username + " >>> Password: " + "********");
+                throw new Exception("Login Failed: Wrong credentials. Please try again.");
             }
         } catch (Exception ex) {
             LOG.error(ex.toString());
