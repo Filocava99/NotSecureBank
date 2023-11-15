@@ -18,6 +18,20 @@ public class OperationsUtil {
     private static final Logger LOG = LogManager.getLogger(OperationsUtil.class);
 
     public static String doTransfer(HttpServletRequest request, long creditActId, String accountIdString, double amount) {
+
+        // Retrieve CSRF token from the session
+        Object csrfTokenInSession = request.getSession().getAttribute("csrfToken");
+
+        // Retrieve CSRF token from the request
+        String csrfTokenInRequest = request.getParameter("csrfToken");
+
+        // If CSRF tokens do not match, return error message
+        if (csrfTokenInSession == null || !csrfTokenInSession.equals(csrfTokenInRequest)) {
+            String message = "ERROR: Invalid CSRF Token.";
+            LOG.error(message);
+            return message;
+        }
+
         LOG.debug("doTransfer(HttpServletRequest, " + creditActId + ", '" + accountIdString + "', " + amount + ")");
 
         long debitActId = 0;

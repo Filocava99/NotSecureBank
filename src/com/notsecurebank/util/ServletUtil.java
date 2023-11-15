@@ -212,6 +212,8 @@ public class ServletUtil {
             String accountStringList = Account.toBase64List(accounts);
             Cookie accountCookie = new Cookie(ServletUtil.NOT_SECURE_BANK_COOKIE, accountStringList);
             session.setAttribute(ServletUtil.SESSION_ATTR_USER, user);
+            String csrfToken = UUID.randomUUID().toString();
+            session.setAttribute("csrfToken", csrfToken);
             return accountCookie;
         } catch (SQLException e) {
             LOG.error(e.toString());
