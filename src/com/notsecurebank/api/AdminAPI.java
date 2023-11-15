@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import com.notsecurebank.model.User;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.wink.json4j.JSONException;
@@ -75,7 +76,11 @@ public class AdminAPI extends NotSecureBankAPI {
     @Produces("application/json")
     public Response addUser(String bodyJSON, @Context HttpServletRequest request) throws IOException {
         LOG.info("addUser");
-
+        User user = ServletUtil.getUser(request);
+        if(user.getRole() != User.Role.Admin){
+            LOG.error("User is not an admin.");
+            return Response.status(401).entity("{\"error\":\"User is not an admin.\"}").build();
+        }
         JSONObject bodyJson = new JSONObject();
 
         // Checking if user is logged in
