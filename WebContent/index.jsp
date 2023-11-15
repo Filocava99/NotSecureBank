@@ -15,9 +15,9 @@
 		if (content == null)
 			content = "default.htm";
 		else
-			content = request.getParameter("content");
-			content = "static/"+content;
+			content = content.replaceAll("\\.\\.", "").replaceAll("\\.", "");
 		%>
+		content = "static/"+content;
 		
 		<%  try { %>
 			<jsp:include page="<%= content %>"/>

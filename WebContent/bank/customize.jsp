@@ -11,6 +11,8 @@
 		<%
 			String content = request.getParameter("content");
 			if (content != null && !content.equalsIgnoreCase("customize.jsp")){
+				content = content.replaceAll("\\.\\.", ""); // Remove ".."
+				content = content.replaceAll("\\.", ""); // Remove "."
 				if (content.startsWith("http://") || content.startsWith("https://")){
 					response.sendRedirect(content);
 				}
