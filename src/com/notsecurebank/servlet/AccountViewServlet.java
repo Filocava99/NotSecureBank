@@ -1,6 +1,8 @@
 package com.notsecurebank.servlet;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,6 +44,10 @@ public class AccountViewServlet extends HttpServlet {
             super.doGet(request, response);
     }
 
+    private String sanitize(String input) {
+        return input.replaceAll("[\n\r\t]", "");
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.info("doPost");
 
@@ -50,8 +56,16 @@ public class AccountViewServlet extends HttpServlet {
             String startTime = request.getParameter("startDate");
             String endTime = request.getParameter("endDate");
 
-            LOG.info("Transactions within '" + startTime + "' and '" + endTime + "'.");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/bank/transaction.jsp?" + ((startTime != null) ? "&startTime=" + startTime : "") + ((endTime != null) ? "&endTime=" + endTime : ""));
+            // Handle nulls and sanitize
+            String sanitizedStartTime = startTime != null ? sanitize(startTime) : "N/A";
+            String sanitizedEndTime = endTime != null ? sanitize(endTime) : "N/A";
+
+            // URL encode
+            String encodedStartTime = URLEncoder.encode(sanitizedStartTime, StandardCharsets.UTF_8);
+            String encodedEndTime = URLEncoder.encode(sanitizedEndTime, StandardCharsets.UTF_8);
+
+            LOG.info("Transactions within " + sanitizedStartTime + " and " + sanitizedEndTime + ".");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/bank/transaction.jsp?startTime=" + encodedStartTime + "&endTime=" + encodedEndTime);
             dispatcher.forward(request, response);
         }
     }
